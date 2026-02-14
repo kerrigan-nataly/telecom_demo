@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +20,18 @@ namespace telecom_demo
         public MainWindow()
         {
             InitializeComponent();
+            App.MainWindow = this;
+            App.Controls = new List<UserControl>();
+
+            App.MainWindow.MainContentControl.Content = new AuthUC();
+        }
+        private void BackButton_OnClick(object? sender, RoutedEventArgs e)
+        {
+            if (App.Controls.Count > 1)
+            {
+                App.Controls.RemoveAt(App.Controls.Count - 1);
+                App.MainWindow.MainContentControl.Content = App.Controls[App.Controls.Count - 1];
+            }
         }
     }
 }

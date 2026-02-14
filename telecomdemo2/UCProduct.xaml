@@ -1,0 +1,255 @@
+﻿<UserControl x:Class="telecomdemo2.UCProduct"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:models="clr-namespace:telecomdemo2.Models"
+             xmlns:local="clr-namespace:telecomdemo2">
+
+    <Grid Margin="10">
+        <Grid.Resources>
+            <!-- компактный шаблон для количества на складе -->
+            <DataTemplate x:Key="CompactStorageQuantityTemplate" DataType="models:ComponentStorage">
+                <Border Background="#E8F5E9" CornerRadius="2" Padding="3" Margin="0,0,3,3">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Storage.NameStorage}" FontSize="11" FontWeight="SemiBold" Margin="0,0,3,0"/>
+                        <TextBlock Text=":" FontSize="11" Margin="0,0,3,0"/>
+                        <TextBlock Text="{Binding ComponentCount}" FontSize="11" FontWeight="Bold"/>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+
+            <!-- компактный компонент -->
+            <DataTemplate DataType="{x:Type models:Component}">
+                <Border Margin="0,0,0,10" Padding="10" Background="{StaticResource light_form}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="3" ShadowDepth="1" Opacity="0.15" Color="#888888"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <!-- компактная шапка -->
+                        <Border Background="{StaticResource light_border_brush}" CornerRadius="3" Padding="8" Margin="0,0,0,10">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBlock Text="{Binding IdComponent}" FontSize="14" FontWeight="Bold" 
+                                           Foreground="White" Margin="0,0,8,0"/>
+                                <TextBlock Text="{Binding NameComponent}" FontSize="14" 
+                                           Foreground="White" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- компактная форма в 2 колонки -->
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- левая колонка - основная информация -->
+                            <StackPanel Grid.Column="0" Margin="0,0,5,0">
+                                <WrapPanel Margin="0,0,0,5">
+                                    <Border Background="#F0F0F0" CornerRadius="2" Padding="5" Margin="0,0,5,5">
+                                        <StackPanel>
+                                            <TextBlock Text="ТИП" FontSize="10" Foreground="#666"/>
+                                            <TextBlock Text="{Binding ComponentType.NameComponentType}" FontSize="12" FontWeight="SemiBold"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Background="#F0F0F0" CornerRadius="2" Padding="5" Margin="0,0,5,5">
+                                        <StackPanel>
+                                            <TextBlock Text="ПРОИЗВОДИТЕЛЬ" FontSize="10" Foreground="#666"/>
+                                            <TextBlock Text="{Binding Manufacturer.NameManufacturer}" FontSize="12"/>
+                                        </StackPanel>
+                                    </Border>
+                                </WrapPanel>
+
+                                <Border Background="#F0F0F0" CornerRadius="2" Padding="5" Margin="0,0,0,5">
+                                    <StackPanel>
+                                        <TextBlock Text="ХАРАКТЕРИСТИКИ" FontSize="10" Foreground="#666"/>
+                                        <TextBlock Text="{Binding Characteristic}" FontSize="11"/>
+                                        <TextBlock Text="{Binding Unit}" FontSize="10" Foreground="#666"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- правая колонка - условия хранения -->
+                            <StackPanel Grid.Column="1" Margin="5,0,0,0">
+                                <WrapPanel Margin="0,0,0,5">
+                                    <Border Background="#F0F0F0" CornerRadius="2" Padding="5" Margin="0,0,5,5">
+                                        <StackPanel>
+                                            <TextBlock Text="ТЕМПЕРАТУРА" FontSize="10" Foreground="#666"/>
+                                            <TextBlock Text="{Binding TemperatureMode.NameTemperatureMode}" FontSize="11"/>
+                                            <TextBlock FontSize="10">
+                                                <Run Text="{Binding TemperatureMode.MinTemperature}"/><Run Text="°C - "/>
+                                                <Run Text="{Binding TemperatureMode.MaxTemperature}"/><Run Text="°C"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <Border Background="#F0F0F0" CornerRadius="2" Padding="5" Margin="0,0,5,5">
+                                        <StackPanel>
+                                            <TextBlock Text="НОРМЫ" FontSize="10" Foreground="#666"/>
+                                            <TextBlock FontSize="11">Мин: <Run Text="{Binding MinStorage}"/></TextBlock>
+                                            <TextBlock FontSize="11">Макс: <Run Text="{Binding MaxStorage}"/></TextBlock>
+                                        </StackPanel>
+                                    </Border>
+                                </WrapPanel>
+
+                                <Border Background="#F0F0F0" CornerRadius="2" Padding="5">
+                                    <StackPanel>
+                                        <TextBlock Text="СРОК ГОДНОСТИ" FontSize="10" Foreground="#666"/>
+                                        <TextBlock Text="{Binding ExpirationDate, StringFormat='dd.MM.yyyy'}" FontSize="11"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <!-- склады - компактно внизу -->
+                        <Border Background="{StaticResource light_form_alt}" CornerRadius="2" Padding="5" Margin="0,5,0,0">
+                            <StackPanel>
+                                <TextBlock Text="НАЛИЧИЕ НА СКЛАДАХ" FontSize="10" Foreground="#666" Margin="0,0,0,3"/>
+
+                                <!-- ItemsControl с WrapPanel вместо прямого WrapPanel -->
+                                <ItemsControl ItemsSource="{Binding ComponentStorages}">
+                                    <ItemsControl.ItemsPanel>
+                                        <ItemsPanelTemplate>
+                                            <WrapPanel Orientation="Horizontal"/>
+                                        </ItemsPanelTemplate>
+                                    </ItemsControl.ItemsPanel>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Border Background="#E8F5E9" CornerRadius="2" Padding="3" Margin="0,0,3,3">
+                                                <StackPanel Orientation="Horizontal">
+                                                    <TextBlock Text="{Binding Storage.NameStorage}" FontSize="11" FontWeight="SemiBold" Margin="0,0,3,0"/>
+                                                    <TextBlock Text=":" FontSize="11" Margin="0,0,3,0"/>
+                                                    <TextBlock Text="{Binding ComponentCount}" FontSize="11" FontWeight="Bold"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,3,0,0">
+                                    <TextBlock Text="Всего:" FontSize="10" FontWeight="Bold" Margin="0,0,3,0"/>
+                                    <TextBlock Text="{Binding TotalStorageCount}" FontSize="11" FontWeight="Bold"/>
+                                    <TextBlock Text="шт." FontSize="10" Margin="2,0,0,0"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- фильтр по типу компонента -->
+        <Border Grid.Row="0" Background="{StaticResource light_form}" Padding="10" Margin="0,0,0,10" CornerRadius="3">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Тип компонента:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <ComboBox x:Name="TypeFilterComboBox"
+                 Width="200"
+                 DisplayMemberPath="NameComponentType"
+                 SelectedValuePath="IdComponentType"
+                 SelectionChanged="TypeFilterComboBox_OnSelectionChanged">
+                    <ComboBoxItem IsSelected="True" Tag="">Все типы</ComboBoxItem>
+                    <Separator/>
+                </ComboBox>
+            </StackPanel>
+        </Border>
+        <!-- список компонентов -->
+        <ListBox Grid.Row="1"
+                 x:Name="ComponentsListBox"
+                 ItemsSource="{Binding Components}"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 BorderThickness="0"
+                 Background="Transparent"
+                 VirtualizingPanel.ScrollUnit="Pixel"
+                 VirtualizingPanel.VirtualizationMode="Recycling">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Margin" Value="0,0,0,3"/>
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="IsTabStop" Value="False"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="Transparent"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </ListBox.ItemContainerStyle>
+        </ListBox>
+
+        <!-- история поставок и перемещений -->
+        <Border Grid.Row="2" Background="{StaticResource light_form}" Padding="10" Margin="0,10,0,0" CornerRadius="3">
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="0,0,0,10">
+                    <TextBlock Text="Недавние операции" FontSize="14" FontWeight="SemiBold"/>
+                    <TextBlock Text="(поставки и перемещения)" FontSize="11" Foreground="#666" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                </StackPanel>
+
+                <ListView x:Name="HistoryListView"
+                         Height="120"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="{StaticResource light_textbox_alt}" 
+                                   CornerRadius="2" 
+                                   Padding="8" 
+                                   Margin="0,0,0,3">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <Border Grid.Column="0" 
+                                           Background="{Binding OperationTypeColor}" 
+                                           CornerRadius="2" 
+                                           Padding="4,2" 
+                                           Margin="0,0,10,0">
+                                        <TextBlock Text="{Binding OperationType}" 
+                                                   Foreground="White" 
+                                                   FontSize="10" 
+                                                   FontWeight="Bold"/>
+                                    </Border>
+
+                                    <TextBlock Grid.Column="1" 
+                                              Text="{Binding ChangeDate, StringFormat='dd.MM.yyyy HH:mm'}" 
+                                              FontSize="11" 
+                                              Foreground="#666" 
+                                              Margin="0,0,10,0"/>
+
+                                    <TextBlock Grid.Column="2" 
+                                              Text="{Binding Description}" 
+                                              FontSize="11"
+                                              TextWrapping="Wrap"/>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
+        </Border>
+
+        <Button Grid.Row="2" 
+                x:Name="NewButton"
+                Content="Новый продукт"
+                Width="Auto"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Margin="0,10,0,0"
+                Click="NewButton_OnClick"/>
+    </Grid>
+</UserControl>

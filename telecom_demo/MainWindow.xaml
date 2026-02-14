@@ -9,14 +9,15 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="2.8*"/>
+            <RowDefinition Height="5*"/>
         </Grid.RowDefinitions>
-        
-        <StackPanel HorizontalAlignment="Right">
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock HorizontalAlignment="Center" Name="TitleTextBlock"></TextBlock>
             <TextBlock HorizontalAlignment="Right" Name="MainTextBlock"></TextBlock>
             <Button Name="BackButton" Click="BackButton_OnClick">Назад</Button>
         </StackPanel>
-        <TextBlock HorizontalAlignment="Center" Name="TitleTextBlock"></TextBlock>
+        
 
         <ContentControl Grid.Row="1" Name="MainContentControl"></ContentControl>
     </Grid>

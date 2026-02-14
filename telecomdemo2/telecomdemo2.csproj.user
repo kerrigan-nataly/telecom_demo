@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <ApplicationDefinition Update="App.xaml">
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="UCAuth.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UCMain.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UCOrder.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UCProduct.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="UCTesting.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WNewOrder.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WNewProduct.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="WNewTesting.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UCAuth.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UCMain.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UCOrder.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UCProduct.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="UCTesting.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WNewOrder.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WNewProduct.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="WNewTesting.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,263 @@
+﻿<UserControl x:Class="telecomdemo2.UCOrder"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:telecomdemo2"
+             xmlns:models="clr-namespace:telecomdemo2.Models"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid Margin="10">
+        <Grid.Resources>
+            <!-- компоненты -->
+            <DataTemplate x:Key="OrderComponentTemplate" DataType="models:OrderComponent">
+                <Border Background="#E8F5E9" CornerRadius="3" Padding="8" Margin="0,0,0,5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                               Text="{Binding Component.NameComponent}" 
+                               FontWeight="SemiBold"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" 
+                               Orientation="Horizontal"
+                               HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding ComponentCount}" 
+                                   FontSize="14" 
+                                   FontWeight="Bold"/>
+                            <TextBlock Text=" шт." 
+                                   Margin="3,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!-- узлы -->
+            <DataTemplate x:Key="OrderNodeTemplate" DataType="models:OrderNode">
+                <Border Background="#E3F2FD" CornerRadius="3" Padding="8" Margin="0,0,0,5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" 
+                               Text="{Binding Node.NameNode}" 
+                               FontWeight="SemiBold"
+                               Margin="0,0,10,0"
+                               VerticalAlignment="Center"/>
+
+                        <StackPanel Grid.Column="1" 
+                               Orientation="Horizontal"
+                               HorizontalAlignment="Right">
+                            <TextBlock Text="{Binding NodeCount}" 
+                                   FontSize="14" 
+                                   FontWeight="Bold"/>
+                            <TextBlock Text=" шт." 
+                                   Margin="3,0,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+
+            <!-- заказ -->
+            <DataTemplate DataType="{x:Type models:Order}">
+                <Border Margin="0,0,0,15" Padding="15" Background="{StaticResource light_form}">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="5" ShadowDepth="2" Opacity="0.2" Color="#888888"/>
+                    </Border.Effect>
+
+                    <StackPanel>
+                        <!-- ШАПКА -->
+                        <Border Background="{StaticResource light_border_brush}" CornerRadius="4" Padding="10" Margin="0,0,0,15">
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                                <TextBlock Text="Заказ №" FontSize="16" 
+                                       Foreground="White" Margin="0,0,5,0"/>
+                                <TextBlock Text="{Binding IdOrder}" FontSize="16" FontWeight="Bold" 
+                                       Foreground="White" Margin="0,0,10,0"/>
+                                <TextBlock Text="{Binding NameOrder}" FontSize="16" 
+                                       Foreground="White" FontWeight="SemiBold"/>
+                            </StackPanel>
+                        </Border>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- о заказе -->
+                            <StackPanel Grid.Column="0" Margin="0,0,10,0">
+                                <Border Style="{StaticResource PropertyGroupStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="ДАТЫ" Style="{StaticResource PropertyTitleStyle}"/>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                            </Grid.RowDefinitions>
+
+                                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Начало:" Margin="0,0,10,5"/>
+                                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding StartDate, StringFormat='dd.MM.yyyy'}"/>
+
+                                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Дедлайн:" Margin="0,0,10,0"/>
+                                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding DeadlineDate, StringFormat='dd.MM.yyyy'}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- компоненты -->
+                            <StackPanel Grid.Column="1" Margin="5,0,10,0">
+                                <Border Style="{StaticResource PropertyGroupStyle}" Background="{StaticResource light_form_alt}">
+                                    <StackPanel>
+                                        <TextBlock Text="КОМПОНЕНТЫ В ЗАКАЗЕ" 
+                                               Style="{StaticResource PropertyTitleStyle}"/>
+
+                                        <ListView ItemsSource="{Binding OrderComponents}" 
+                                              BorderThickness="0" 
+                                              Background="Transparent"
+                                              MaxHeight="200"
+                                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                              ItemTemplate="{StaticResource OrderComponentTemplate}">
+                                        </ListView>
+
+                                        <StackPanel Orientation="Horizontal" 
+                                               Margin="0,10,0,0" 
+                                               HorizontalAlignment="Right">
+                                            <TextBlock Text="Всего: " FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding OrderComponents.Count}" 
+                                                   FontSize="14" FontWeight="Bold"/>
+                                            <TextBlock Text=" компонентов" Margin="3,0,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- узлы -->
+                            <StackPanel Grid.Column="2" Margin="5,0,0,0">
+                                <Border Style="{StaticResource PropertyGroupStyle}" Background="{StaticResource light_form_alt}">
+                                    <StackPanel>
+                                        <TextBlock Text="УЗЛЫ В ЗАКАЗЕ" 
+                                               Style="{StaticResource PropertyTitleStyle}"/>
+
+                                        <ListView ItemsSource="{Binding OrderNodes}" 
+                                              BorderThickness="0" 
+                                              Background="Transparent"
+                                              MaxHeight="200"
+                                              ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                              ItemTemplate="{StaticResource OrderNodeTemplate}">
+                                        </ListView>
+
+                                        <StackPanel Orientation="Horizontal" 
+                                               Margin="0,10,0,0" 
+                                               HorizontalAlignment="Right">
+                                            <TextBlock Text="Всего: " FontWeight="Bold"/>
+                                            <TextBlock Text="{Binding OrderNodes.Count}" 
+                                                   FontSize="14" FontWeight="Bold"/>
+                                            <TextBlock Text=" узлов" Margin="3,0,0,0"/>
+                                        </StackPanel>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </DataTemplate>
+
+            <Style x:Key="StatusHeaderStyle" TargetType="Border">
+                <Setter Property="Background" Value="#2C3E50"/>
+                <Setter Property="CornerRadius" Value="4"/>
+                <Setter Property="Padding" Value="15,10"/>
+                <Setter Property="Margin" Value="0,0,0,15"/>
+            </Style>
+        </Grid.Resources>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- группировка заказов по статусам -->
+        <ScrollViewer Grid.Row="0">
+            <ItemsControl ItemsSource="{Binding OrdersGroupedByStatus}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,20">
+                            <Border Style="{StaticResource StatusHeaderStyle}">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+
+                                    <TextBlock Grid.Column="0" 
+                                   Text="{Binding Status.NameStatus}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold"
+                                   Foreground="White"
+                                   Margin="0,0,15,0"/>
+
+                                    <Border Grid.Column="1" 
+                                Background="#34495E" 
+                                CornerRadius="15"
+                                Padding="8,3">
+                                        <TextBlock Text="{Binding Orders.Count}" 
+                                       Foreground="White"
+                                       FontWeight="Bold"
+                                       FontSize="14"/>
+                                    </Border>
+                                </Grid>
+                            </Border>
+
+                            <!-- заказы -->
+                            <ListBox ItemsSource="{Binding Orders}"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         BorderThickness="0"
+                         Background="Transparent"
+                         VirtualizingPanel.ScrollUnit="Pixel"
+                         VirtualizingPanel.VirtualizationMode="Recycling">
+                                <ListBox.ItemContainerStyle>
+                                    <Style TargetType="ListBoxItem">
+                                        <Setter Property="Background" Value="Transparent"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Margin" Value="0,0,0,5"/>
+                                        <Setter Property="Padding" Value="0"/>
+                                        <Setter Property="IsTabStop" Value="False"/>
+                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Trigger>
+                                            <Trigger Property="IsSelected" Value="True">
+                                                <Setter Property="Background" Value="Transparent"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ListBox.ItemContainerStyle>
+                            </ListBox>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Button Grid.Row="1" 
+                x:Name="NewButton"
+                Content="Создать заказ"
+                Width="Auto"
+                HorizontalAlignment="Right"
+                Click="NewButton_OnClick"/>
+    </Grid>
+</UserControl>

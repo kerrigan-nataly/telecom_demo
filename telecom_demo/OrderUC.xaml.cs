@@ -23,6 +23,7 @@ namespace telecom_demo
         public OrderUC()
         {
             InitializeComponent();
+            App.Controls.Add(this);
         }
     }
 }

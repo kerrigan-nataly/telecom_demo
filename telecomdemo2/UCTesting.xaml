@@ -1,0 +1,97 @@
+﻿<UserControl x:Class="telecomdemo2.UCTesting"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:telecomdemo2"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Margin="10" Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Заголовок -->
+            <TextBlock Text="Информация по тестированию узлов" 
+                   FontSize="16" FontWeight="Bold" 
+                   HorizontalAlignment="Center" Grid.Row="0"/>
+
+            <!-- Таблица сводки по дефектам -->
+            <DataGrid Grid.Row="2" 
+                  ItemsSource="{Binding DefectSummaries, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  SelectionMode="Single"
+                  SelectionUnit="FullRow"
+                  Margin="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Тип узла" 
+                                    Binding="{Binding NodeTypeName}" 
+                                    Width="*"/>
+                    <DataGridTextColumn Header="Тип дефекта" 
+                                    Binding="{Binding DefectType}" 
+                                    Width="*"/>
+                    <DataGridTextColumn Header="Количество" 
+                                    Binding="{Binding Count}" 
+                                    Width="Auto"/>
+                </DataGrid.Columns>
+
+                <!-- Добавляем обработчик выбора строки -->
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridRow">
+                        <EventSetter Event="MouseDoubleClick" Handler="DataGridRow_DoubleClick"/>
+                    </Style>
+                </DataGrid.Resources>
+            </DataGrid>
+
+            <!-- Заголовок списка бракованных изделий -->
+            <StackPanel Grid.Row="4" Orientation="Horizontal" Margin="5,5,5,0">
+                <TextBlock Text="Бракованные изделия" 
+                       FontSize="14" FontWeight="Bold"/>
+                <TextBlock Text="{Binding SelectedDefectType, StringFormat=' - {0}', RelativeSource={RelativeSource AncestorType=UserControl}}" 
+                       FontSize="14" 
+                       Margin="10,0,0,0"
+                       Foreground="Red"/>
+            </StackPanel>
+
+            <!-- Список бракованных изделий -->
+            <DataGrid Grid.Row="4" 
+                  ItemsSource="{Binding DefectiveNodes, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Margin="5">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="ID узла" 
+                                    Binding="{Binding IdNode}" 
+                                    Width="Auto"/>
+                    <DataGridTextColumn Header="Наименование узла" 
+                                    Binding="{Binding NameNode}" 
+                                    Width="*"/>
+                    <DataGridTextColumn Header="Тип узла" 
+                                    Binding="{Binding NodeType.NameNodeType}" 
+                                    Width="*"/>
+                    <DataGridTextColumn Header="Результат тестирования" 
+                                    Binding="{Binding TestingResult.NameTestingResult}" 
+                                    Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+
+        <Button Grid.Row="1" 
+                x:Name="NewButton"
+                Content="Записать результаты тестирования"
+                Width="Auto"
+                HorizontalAlignment="Right"
+                Click="NewButton_OnClick"/>
+    </Grid>
+</UserControl>

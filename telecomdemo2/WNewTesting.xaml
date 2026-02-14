@@ -1,0 +1,134 @@
+﻿<Window x:Class="telecomdemo2.WNewTesting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:telecomdemo2"
+        mc:Ignorable="d"
+        Title="WNewTesting" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Заголовок -->
+        <TextBlock Text="Тестировка узлов заказа" 
+                   FontSize="18" FontWeight="Bold" 
+                   Margin="0,0,0,10" Grid.Row="0"/>
+
+        <!-- Выбор заказа -->
+        <GroupBox Header="Выбор заказа" Grid.Row="1" Margin="0,0,0,10">
+            <StackPanel Orientation="Horizontal" Margin="10">
+                <ComboBox x:Name="cmbOrders" 
+                          DisplayMemberPath="NameOrder" 
+                          SelectedValuePath="IdOrder"
+                          Width="300" 
+                          SelectionChanged="cmbOrders_SelectionChanged"/>
+                <TextBlock Text="Заказы не найдены" 
+                           x:Name="txtNoOrders" 
+                           Foreground="Gray" 
+                           VerticalAlignment="Center"
+                           Margin="10,0,0,0"
+                           Visibility="Collapsed"/>
+            </StackPanel>
+        </GroupBox>
+
+        <!-- Список узлов заказа -->
+        <GroupBox Header="Узлы заказа" Grid.Row="2" Margin="0,0,0,10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Информация о заказе -->
+                <StackPanel Grid.Row="0" 
+                            x:Name="panelOrderInfo" 
+                            Visibility="Collapsed" 
+                            Margin="10">
+                    <TextBlock Text="{Binding ElementName=cmbOrders, Path=SelectedItem.NameOrder}" 
+                               FontWeight="Bold" FontSize="14"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
+                        <TextBlock Text="Дата начала: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding ElementName=cmbOrders, Path=SelectedItem.StartDate, StringFormat=d}"/>
+                        <TextBlock Text=" | " Margin="5,0" Foreground="Gray"/>
+                        <TextBlock Text="Дедлайн: " Foreground="Gray"/>
+                        <TextBlock Text="{Binding ElementName=cmbOrders, Path=SelectedItem.DeadlineDate, StringFormat=d}"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Таблица узлов -->
+                <DataGrid x:Name="dgNodes" 
+                          Grid.Row="1"
+                          AutoGenerateColumns="False"
+                          IsReadOnly="False"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          CanUserReorderColumns="False"
+                          CanUserResizeColumns="True"
+                          SelectionMode="Single"
+                          Margin="10">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID" 
+                                           Binding="{Binding Node.IdNode}" 
+                                           Width="50"/>
+                        <DataGridTextColumn Header="Наименование узла" 
+                                           Binding="{Binding Node.NameNode}" 
+                                           Width="200"/>
+                        <DataGridTextColumn Header="Тип узла" 
+                                           Binding="{Binding Node.NodeType.NameNodeType}" 
+                                           Width="150"/>
+                        <DataGridTextColumn Header="Количество" 
+                                           Binding="{Binding NodeCount}" 
+                                           Width="80"/>
+                        <DataGridTemplateColumn Header="Результат тестировки" 
+                                                Width="200">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox x:Name="cmbTestingResult"
+                                              ItemsSource="{Binding AvailableTestingResults, 
+                                                RelativeSource={RelativeSource AncestorType=Window}}"
+                                              DisplayMemberPath="NameTestingResult"
+                                              SelectedValuePath="IdTestingResult"
+                                              SelectedValue="{Binding Node.TestingResultId}"
+                                              SelectionChanged="cmbTestingResult_SelectionChanged"
+                                              Tag="{Binding Node}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <!-- Сообщение о пустом заказе -->
+                <TextBlock x:Name="txtNoNodes" 
+                           Text="В выбранном заказе нет узлов" 
+                           Foreground="Gray" 
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Grid.Row="1"
+                           Visibility="Collapsed"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Кнопки управления -->
+        <StackPanel Grid.Row="3" 
+                    Orientation="Horizontal" 
+                    HorizontalAlignment="Right">
+            <Button x:Name="btnSave" 
+                    Content="Сохранить изменения" 
+                    Padding="10,5" 
+                    Width="150"
+                    Click="btnSave_Click"/>
+            <Button x:Name="btnRefresh" 
+                    Content="Обновить" 
+                    Padding="10,5" 
+                    Width="100"
+                    Margin="10,0,0,0"
+                    Click="btnRefresh_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

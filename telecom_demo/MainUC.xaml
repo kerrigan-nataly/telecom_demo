@@ -4,9 +4,237 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:telecom_demo"
+             xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=DotNetProjects.WpfToolkit.DataVisualization"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
             
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.3*"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Vertical">
+                <TextBlock>cтатистика</TextBlock>
+                <ListBox Name="OrderListBox" Height="60">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock>срочные задачи</TextBlock>
+                <ListBox Name="UrgentOrderListBox" Height="100">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock>низкие поставки</TextBlock>
+                <ListBox Name="ProductListBox" Height="60">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+            <StackPanel Orientation="Vertical" Grid.Column="1">
+                <TextBlock>График</TextBlock>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Заголовок -->
+                    <Border Grid.Row="0" Background="#2D2D30" Padding="15">
+                        <StackPanel>
+                            <TextBlock Text="СТАТИСТИКА ЗАКАЗОВ ПО СТАТУСАМ" 
+                         FontSize="16" 
+                         FontWeight="Bold" 
+                         Foreground="White"/>
+                            <TextBlock x:Name="TotalOrdersText" 
+                         FontSize="12" 
+                         Foreground="LightGray" 
+                         Margin="0,5,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Основной контент -->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="300"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Круговая диаграмма -->
+                        <Border Grid.Column="0" 
+                    Margin="20" 
+                    BorderBrush="#E0E0E0" 
+                    BorderThickness="1" 
+                    Background="White">
+                            <Grid>
+                                <charting:Chart x:Name="PieChart">
+                                    <charting:Chart.Series>
+                                        <charting:PieSeries 
+                                x:Name="PieSeries"
+                                IndependentValueBinding="{Binding Status.NameStatus}"
+                                DependentValueBinding="{Binding OrderCount}"
+                                IsSelectionEnabled="True">
+
+                                            <charting:PieSeries.DataPointStyle>
+                                                <Style TargetType="charting:PieDataPoint">
+                                                    <Setter Property="Template">
+                                                        <Setter.Value>
+                                                            <ControlTemplate TargetType="charting:PieDataPoint">
+                                                                <Grid>
+                                                                    <VisualStateManager.VisualStateGroups>
+                                                                        <VisualStateGroup x:Name="CommonStates">
+                                                                            <VisualState x:Name="Normal"/>
+                                                                            <VisualState x:Name="MouseOver">
+                                                                                <Storyboard>
+                                                                                    <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                                                                                         To="0.8" Duration="0:0:0.1"/>
+                                                                                </Storyboard>
+                                                                            </VisualState>
+                                                                        </VisualStateGroup>
+                                                                    </VisualStateManager.VisualStateGroups>
+
+                                                                    <!-- Сегмент диаграммы -->
+                                                                    <Path Fill="{TemplateBinding Background}" 
+                                                              Stroke="White" 
+                                                              StrokeThickness="2">
+                                                                        <Path.Data>
+                                                                            <Geometry>
+                                                                                <PathGeometry>
+                                                                                    <PathFigure StartPoint="{TemplateBinding Geometry.StartPoint}">
+                                                                                        <PolyLineSegment Points="{TemplateBinding Geometry.Points}"/>
+                                                                                        <ArcSegment Point="{TemplateBinding Geometry.StartPoint}"
+                                                                                        Size="{TemplateBinding Geometry.Size}"
+                                                                                        IsLargeArc="{TemplateBinding Geometry.IsLargeArc}"
+                                                                                        SweepDirection="{TemplateBinding Geometry.SweepDirection}"/>
+                                                                                        <LineSegment Point="{TemplateBinding Geometry.StartPoint}"/>
+                                                                                    </PathFigure>
+                                                                                </PathGeometry>
+                                                                            </Geometry>
+                                                                        </Path.Data>
+                                                                    </Path>
+
+                                                                    <!-- Текст на крупных сегментах -->
+                                                                    <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=FormattedDependentValue}"
+                                                                 HorizontalAlignment="Center"
+                                                                 VerticalAlignment="Center"
+                                                                 FontWeight="Bold"
+                                                                 Foreground="Black"
+                                                                 FontSize="11"
+                                                                 Visibility="{Binding Percentage, Converter={StaticResource PercentageVisibilityConverter}}"/>
+                                                                </Grid>
+                                                            </ControlTemplate>
+                                                        </Setter.Value>
+                                                    </Setter>
+
+                                                    <Setter Property="Background" 
+                                                Value="{Binding Status, Converter={StaticResource StatusColorConverter}}"/>
+
+                                                    <Setter Property="ToolTip">
+                                                        <Setter.Value>
+                                                            <ToolTip>
+                                                                <StackPanel>
+                                                                    <TextBlock Text="{Binding Status.NameStatus}" 
+                                                                 FontWeight="Bold"/>
+                                                                    <TextBlock Text="{Binding OrderCount, StringFormat='Заказов: {0}'}"/>
+                                                                    <TextBlock Text="{Binding Percentage, StringFormat='Процент: {0:F1}%'}"/>
+                                                                </StackPanel>
+                                                            </ToolTip>
+                                                        </Setter.Value>
+                                                    </Setter>
+                                                </Style>
+                                            </charting:PieSeries.DataPointStyle>
+                                        </charting:PieSeries>
+                                    </charting:Chart.Series>
+
+                                    <charting:Chart.LegendStyle>
+                                        <Style TargetType="charting:Legend">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </Style>
+                                    </charting:Chart.LegendStyle>
+                                </charting:Chart>
+
+                                <!-- Центральная надпись -->
+                                <Border Width="100" Height="100" 
+                            Background="White" 
+                            CornerRadius="50"
+                            BorderBrush="#E0E0E0" 
+                            BorderThickness="1"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                                    <Viewbox>
+                                        <TextBlock x:Name="CenterText" 
+                                     TextAlignment="Center"
+                                     FontWeight="Bold"
+                                     Foreground="#2D2D30"/>
+                                    </Viewbox>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <!-- Панель с деталями -->
+                        <Border Grid.Column="1" 
+                    Background="#F8F8F8" 
+                    BorderBrush="#E0E0E0" 
+                    BorderThickness="1,0,0,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Заголовок панели -->
+                                <Border Grid.Row="0" 
+                            Background="#2D2D30" 
+                            Padding="15">
+                                    <TextBlock Text="СТАТУСЫ ЗАКАЗОВ" 
+                                 FontSize="13" 
+                                 FontWeight="Bold" 
+                                 Foreground="White"/>
+                                </Border>
+
+                                <!-- Список статусов -->
+                                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                                    <ItemsControl x:Name="StatusList" 
+                                    ItemTemplate="{StaticResource StatusStatisticTemplate}"
+                                    Margin="10"/>
+                                </ScrollViewer>
+                            </Grid>
+                        </Border>
+                    </Grid>
+
+                    <!-- Панель управления -->
+                    <Border Grid.Row="2" 
+                Background="#F0F0F0" 
+                Padding="10" 
+                BorderBrush="#E0E0E0" 
+                BorderThickness="0,1,0,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Обновить" 
+                        Style="{StaticResource ModernButton}"
+                        Width="100"
+                        Click="RefreshButton_Click"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                <RadioButton Name="Piechart" Checked="SortButton_OnChecked">круговая диаграмма</RadioButton>
+                <RadioButton Name="Graphic" Checked="SortButton_OnChecked">график</RadioButton>
+                <StackPanel Name="ButtonsPanel" Orientation="Horizontal">
+                    <Button Name="OrderButton" Click="OrderButton_OnClick">заказы</Button>
+                    <Button Name="ProductButton" Click="ProductButton_OnClick">товар</Button>
+                    <Button Name="ReportButton" Click="ProductButton_OnClick">отчет</Button>
+                    <Button Name="TestingButton" Click="ProductButton_OnClick">контроль качества</Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>

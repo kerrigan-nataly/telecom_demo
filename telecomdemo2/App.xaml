@@ -1,0 +1,74 @@
+﻿<Application x:Class="telecomdemo2.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:telecomdemo2"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <!-- цвета светлая тема -->
+        <Brush x:Key="light_background">#D9D9E5</Brush>
+        <Brush x:Key="light_form">#D0D8FF</Brush>
+        <Brush x:Key="light_textbox">#C0B0FF</Brush>
+        <Brush x:Key="light_form_alt">#D8D0FF</Brush>
+        <Brush x:Key="light_textbox_alt">#B0C0FF</Brush>
+        <Brush x:Key="light_text">#5050A0</Brush>
+        <Brush x:Key="light_border_brush">#AB80FF</Brush>
+        <Border x:Key="light_border" BorderBrush="#AB80FF" CornerRadius="8"/>
+
+        <!-- цвета темная тема -->
+        <Brush x:Key="dark_form">#0040B0</Brush>
+        <Brush x:Key="dark_textbox">#3070D0</Brush>
+        <Brush x:Key="dark_text">#D0FFFF</Brush>
+        <Brush x:Key="dark_border_brush">#80A0FF</Brush>
+        <Border x:Key="dark_border" BorderBrush="#80A0FF" CornerRadius="8"/>
+        
+        <!-- группировка полей -->
+        <Style x:Key="PropertyGroupStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource light_textbox}"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
+            <Setter Property="Padding" Value="8"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="BorderBrush" Value="{StaticResource light_border_brush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <!-- заголовки для группировок -->
+        <Style x:Key="PropertyTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource light_text}"/>
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="FontSize" Value="20"></Setter>
+            <Setter Property="Height" Value="33"></Setter>
+            <Setter Property="Foreground" Value="{StaticResource light_text}"></Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Width" Value="300"></Setter>
+            <Setter Property="Height" Value="29"></Setter>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="FontSize" Value="5"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Width" Value="300"></Setter>
+            <Setter Property="Height" Value="29"></Setter>
+        </Style>
+
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Width" Value="300"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="Width" Value="100"></Setter>
+            <Setter Property="Height" Value="45"></Setter>
+        </Style>
+    </Application.Resources>
+</Application>

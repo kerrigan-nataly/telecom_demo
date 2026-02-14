@@ -6,18 +6,19 @@
     <Application.Resources>
         <Color x:Key="light_form">#D0D8FF</Color>
         <Color x:Key="light_textbox">#C0B0FF</Color>
-        <Color x:Key="light_text">#5050A0</Color>
+        <Brush x:Key="light_text">#5050A0</Brush>
         <Border x:Key="light_border" BorderBrush="#AB80FF" CornerRadius="8"/>
 
         <Color x:Key="dark_form">#0040B0</Color>
         <Color x:Key="dark_textbox">#3070D0</Color>
-        <Color x:Key="dark_text">#D0FFFF</Color>
+        <Brush x:Key="dark_text">#D0FFFF</Brush>
         <Border x:Key="dark_border" BorderBrush="#80A0FF" CornerRadius="8"/>
 
         <Style TargetType="TextBlock">
             <Setter Property="Margin" Value="5"></Setter>
             <Setter Property="FontSize" Value="20"></Setter>
             <Setter Property="Height" Value="33"></Setter>
+            <Setter Property="Foreground" Value="{StaticResource light_text}"></Setter>
         </Style>
 
         <Style TargetType="TextBox">
@@ -43,5 +44,54 @@
             <Setter Property="Width" Value="100"></Setter>
             <Setter Property="Height" Value="45"></Setter>
         </Style>
+
+        <!-- Конвертер для цветов статусов -->
+        <local:StatusColorConverter x:Key="StatusColorConverter"/>
+
+        <!-- Конвертер для фильтрации маленьких сегментов -->
+        <local:PercentageVisibilityConverter x:Key="PercentageVisibilityConverter"/>
+
+        <!-- Шаблон для элемента статистики -->
+        <DataTemplate x:Key="StatusStatisticTemplate">
+            <Border BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="10,5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Цветной индикатор -->
+                    <Ellipse Grid.Column="0" 
+                           Width="12" Height="12" 
+                           Fill="{Binding Status, Converter={StaticResource StatusColorConverter}}"
+                           VerticalAlignment="Center"
+                           Margin="0,0,10,0"/>
+
+                    <!-- Название статуса -->
+                    <TextBlock Grid.Column="1" 
+                             Text="{Binding Status.NameStatus}" 
+                             VerticalAlignment="Center"
+                             FontSize="12"/>
+
+                    <!-- Количество заказов -->
+                    <TextBlock Grid.Column="2" 
+                             Text="{Binding OrderCount, StringFormat='{}{0} зак.'}" 
+                             VerticalAlignment="Center"
+                             FontSize="11"
+                             Foreground="Gray"
+                             Margin="0,0,15,0"/>
+
+                    <!-- Процент -->
+                    <TextBlock Grid.Column="3" 
+                             Text="{Binding Percentage, StringFormat='{}{0:F1}%'}" 
+                             VerticalAlignment="Center"
+                             FontWeight="Bold"
+                             FontSize="12"/>
+                </Grid>
+            </Border>
+        </DataTemplate>
+        
     </Application.Resources>
 </Application>

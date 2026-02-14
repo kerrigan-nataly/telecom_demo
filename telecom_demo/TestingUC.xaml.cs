@@ -23,6 +23,7 @@ namespace telecom_demo
         public TestingUC()
         {
             InitializeComponent();
+            App.Controls.Add(this);
         }
     }
 }

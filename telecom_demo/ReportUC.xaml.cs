@@ -23,6 +23,7 @@ namespace telecom_demo
         public ReportUC()
         {
             InitializeComponent();
+            App.Controls.Add(this);
         }
     }
 }
